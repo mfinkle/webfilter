@@ -23,11 +23,8 @@ var HttpObserver = {
       // Let's only check document (main and iframes) loads
       if (!(channel.loadFlags & channel.LOAD_DOCUMENT_URI)) {
         debug("not a document load");
-        debug("URL: " + channel.URI.spec);
         return;
       }
-
-      debug("test URL: " + channel.URI.spec);
 
       let allow = this.shouldAllow(channel.URI);
       if (!allow) {
