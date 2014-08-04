@@ -13,12 +13,21 @@ var BlockList = [
 var HttpObserver = {
   observe: function (aSubject, aTopic, aData) {
     debug("got a request");
-    if (aTopic == 'http-on-modify-request') {
+    if (aTopic == "http-on-modify-request") {
       let channel = aSubject.QueryInterface(Ci.nsIHttpChannel);
       if (!channel) {
         debug("has no channel");
         return;
       }
+
+      // Let's only check document (main and iframes) loads
+      if (!(channel.loadFlags & channel.LOAD_DOCUMENT_URI)) {
+        debug("not a document load");
+        debug("URL: " + channel.URI.spec);
+        return;
+      }
+
+      debug("test URL: " + channel.URI.spec);
 
       let allow = this.shouldAllow(channel.URI);
       if (!allow) {
